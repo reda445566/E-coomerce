@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs";
 import userModel from "../model.js/user.model";
 import jwt from "jsonwebtoken";
 //
@@ -27,7 +28,7 @@ exports.signup = async (req, res) => {
     try {
         //validation
         if (!email || !name || !password) {
-            res.sataus(404).json("all fields are required")
+            return res.sataus(404).json("all fields are required")
         }
         //userexisring
         const userexisring = await userModel.findOne({ email });
@@ -36,11 +37,12 @@ exports.signup = async (req, res) => {
         }
 
         // create user
-        const newUser = await user.create({ name, email, password })
+        const newUser = await userModel.create({ name, email, password })
 
         // generate tokens
-        const accessToken = generateAccessToken(newUser._id)
+        const accessToken = generateToken(newUser._id)
         const refreshToken = generateRefreshToken(newUser._id)
+
 
         res.status(201).json({
             message: "User created successfully",
@@ -63,7 +65,43 @@ exports.signup = async (req, res) => {
 
 
 exports.login = async (req, res) => {
-    res.send("login");
+    try {
+        const { email, password } = req.body;
+        // check
+        const user = await userModel.findOne({ email })
+        if (!user) {
+            return res.status(400).json({ message: "Invalid email or password" })
+        }
+        // compare 
+        const isMatch = await bcrypt.compare(password, user.password)
+        if (!isMatch) {
+            return res.status(400).json({ message: "Invalid email or password" })
+        }
+        //  generate tokens
+        const accessToken = generateAccessToken(user._id)
+        const refreshToken = generateRefreshToken(user._id)
+        //save
+        user.refreshToken = refreshToken
+        await user.save()
+        //resbonse
+        res.status(200).json({
+            message: "Login successful",
+            accessToken,
+            refreshToken,
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email
+            }
+        })
+
+
+
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({ message: "Server error" })
+
+    }
 }
 
 exports.logout = async (req, res) => {
@@ -92,5 +130,6 @@ exports.logout = async (req, res) => {
     }
 
 }
+
 
 
