@@ -2,8 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import authRoutes from "./routes/auth.router.js";
 
-import { connectdb } from "./config/D_B.JS";
-
+import { connectdb } from "./config/db.js";
 const app = express();
 //
 app.use(express.json())
