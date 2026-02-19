@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import userModel from "../model.js/user.model";
+import userModel from "../model/user.model";
 import jwt from "jsonwebtoken";
 //
 const generateToken = (userid) => {
@@ -11,7 +11,7 @@ const generateToken = (userid) => {
 
     return accessToken
 }
-//re
+//referesh token
 const generateRefreshToken = (userid) => {
     const refreshToken = jwt.sign(
         { userid },
@@ -130,6 +130,4 @@ exports.logout = async (req, res) => {
     }
 
 }
-
-
 
