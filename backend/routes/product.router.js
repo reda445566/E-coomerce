@@ -9,13 +9,13 @@ import { protectRoute } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-// 🟢 Get all products
-router.get("/", protectRoute, getallproducts);
+//  Get all products
+router.get("/", protectRoute(), getallproducts);
 
-// 🟢 Get featured products
+//  Get featured products
 router.get("/featured", protectRoute, getfeaturedproducts);
 
-// 🔵 Create product (Admin only لو عندك ميدل وير أدمن ضيفه هنا)
+//  Create product (Admin only لو عندك ميدل وير أدمن ضيفه هنا)
 router.post("/", protectRoute, createproduct);
 
 export default router;
