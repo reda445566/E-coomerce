@@ -1,16 +1,21 @@
-import { getSalt } from "bcryptjs";
-import express, { application } from "express"; z
-import { getallproducts } from "../controller/product.controller";
+import express from "express";
+import {
+    getallproducts,
+    getfeaturedproducts,
+    createproduct
+} from "../controller/product.controller.js";
+
+import { protectRoute } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
+// 🟢 Get all products
+router.get("/", protectRoute, getallproducts);
 
-router.get("/api/products", productRoute, adminRoute, getallproducts)
+// 🟢 Get featured products
+router.get("/featured", protectRoute, getfeaturedproducts);
 
+// 🔵 Create product (Admin only لو عندك ميدل وير أدمن ضيفه هنا)
+router.post("/", protectRoute, createproduct);
 
-
-
-
-
-
-export default router
+export default router;

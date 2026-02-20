@@ -21,6 +21,7 @@ const generateRefreshToken = (userid) => {
 
     return refreshToken
 }
+
 // auth
 
 exports.signup = async (req, res) => {
@@ -130,4 +131,9 @@ exports.logout = async (req, res) => {
     }
 
 }
+
+
+
+
+
 

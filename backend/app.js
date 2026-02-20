@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import authRoutes from "./routes/auth.router.js";
 import productRoutes from "./routes/product.router.js";
+import { protectRoute } from "../middleware/auth.middleware.js";
 import { connectDB } from "./config/db.js";
 const app = express();
 //
